@@ -5,5 +5,12 @@ window.addEventListener("load", () => {
   const gameManager = new GameManager();
 
   gameManager.setupLevel();
-  gameManager.render();
+
+  const loop = () => {
+    gameManager.render();
+    gameManager.update();
+    window.requestAnimationFrame(loop);
+  }
+
+  loop();
 });

@@ -4,12 +4,23 @@ class GameManager {
     this.width = 24;
     this.size = 35;
     this.blocks = [];
+    this.pressedKeys = {};
+
+    window.addEventListener("keydown", (event) => {
+      this.pressedKeys[event.key] = true;
+    });
+  
+    window.addEventListener("keyup", (event) => {
+      this.pressedKeys[event.key] = false;
+    });
   }
 
   setupLevel() {
+    this.player = new Player(map.playerPosition.x * this.size, map.playerPosition.y * this.size, 20)
+
     for(let y = 0; y < this.height; y++) {
       for(let x = 0; x < this.width; x++) {
-        const block = map[y * this.width + x];
+        const block = map.blocks[y * this.width + x];
         
         switch(block) {
           case AIR:
@@ -25,6 +36,10 @@ class GameManager {
         }
       }
     }
+  }
+
+  update() {
+    this.player.update(this.pressedKeys);
   }
 
   render() {
@@ -43,5 +58,7 @@ class GameManager {
     for(const block of this.blocks) {
       block.render();
     }
+
+    this.player.render();
   }
 }
